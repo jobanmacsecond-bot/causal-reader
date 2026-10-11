@@ -1,0 +1,5 @@
+https://mrna-larger-newman-motorola.trycloudflare.com/
+
+Working public preview, verified October 10, 2026.
+This is a temporary link. It works while the local server, tunnel, and computer remain running and connected.
+Permanent Render deployment is pending GitHub repository setup.

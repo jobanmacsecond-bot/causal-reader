@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: causal-global-news
+    runtime: node
+    plan: free
+    branch: main
+    autoDeployTrigger: commit
+    buildCommand: node --test tests/*.test.mjs
+    startCommand: node hosted-server.mjs
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: NODE_ENV
+        value: production
+      - key: SKIP_INSTALL_DEPS
+        value: "true"
