@@ -1,8 +1,10 @@
 # Run Causal on Render
 
+Public website: **https://causal-global-news.onrender.com/**. Source: **https://github.com/jobanmacsecond-bot/causal-reader**. The Free Node web service is deployed in the user-selected My Workspace, in Oregon. Page, live API, assets, and readiness checks passed on October 11, 2026.
+
 The standalone hosted entry serves the complete reader and its live API without installing the optional Vinext, React, or database tooling. `render.yaml` selects the Free web-service plan, checks the source with the offline Node test suite, and starts `node hosted-server.mjs`. Nothing in this configuration creates a paid database, disk, or other service.
 
-Connect the published GitHub repository to a Render Blueprint and review the Free plan before creating it. For a manually created Node Web Service, use:
+The existing service was created directly as a Free Node Web Service with the commands and environment below. Its default TCP health check is active, and `/healthz` was verified separately over HTTPS. The optional Blueprint configures `/healthz` as an HTTP health check. To recreate the service manually, use:
 
 - Build command: `node --test tests/*.test.mjs`
 - Start command: `node hosted-server.mjs`
@@ -25,4 +27,4 @@ Render's Free web services sleep after 15 minutes without traffic and can take a
 
 This entry is a public read-only website. It retains source URL allowlists, bounded source retrieval and caches, request limits, same-origin API checks, and security headers. It does not add login or a distributed rate limiter. `/healthz` checks process readiness without contacting publishers; source availability is shown inside the reader.
 
-After deployment, verify the HTTPS page, globe assets, `/healthz`, `/api/news`, an article, and its context. Also verify that a foreign Host or Origin is rejected. Only then save the verified website address as `link to the webpage.txt`; a repository or temporary preview URL does not prove a permanent deployment.
+After future deployment changes, verify the HTTPS page, globe assets, `/healthz`, `/api/news`, an article, and its context. Also verify that a foreign Host or Origin is rejected. `link to the webpage.txt` now contains the verified public Render URL.

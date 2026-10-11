@@ -4,6 +4,8 @@ A working prototype with global headlines from curated international and regiona
 
 ## Open or run
 
+Visit the public website: **https://causal-global-news.onrender.com/**. This shareable HTTPS address works independently of the local computer. The Free Render service sleeps after inactivity and can take about a minute to wake on the next visit. [Free service limits](https://render.com/docs/free).
+
 The current local copy is at http://127.0.0.1:8885. This address works on this computer while the server is running.
 
 For the dependency-free local version, use Node.js 18 or newer:
@@ -53,18 +55,20 @@ Feeds are fetched on the server. Official source APIs receive search terms. Save
 - Strict Content Security Policy, anti-framing, no-referrer, MIME protections, restricted browser permissions, and HTTPS transport headers in the hosted worker and static asset configuration.
 - GET-only APIs with bounded inputs, exact parameters, and cross-site request restrictions. The local server listens only on loopback and checks the requested host.
 - External retrieval is limited to approved HTTPS source hosts and redirects, with timeouts and response size limits. Users cannot submit arbitrary fetch URLs.
-- Bounded caches, shared upstream requests, concurrency limits, and refresh cooldowns reduce unnecessary source traffic. These limits are per worker instance; they are not a global rate limiter or a substitute for hosting-level abuse controls.
+- Bounded caches, shared upstream requests, concurrency limits, and refresh cooldowns reduce unnecessary source traffic. These limits are per server process or worker instance; they are not a global rate limiter or a substitute for hosting-level abuse controls.
 - Internal upstream errors are hidden from visitors. Failed refreshes retain and label the previous feed. Reader requests time out and cancel when superseded; related-story dialogs cannot display a superseded response.
-- Cold workers recover current story references by loading only approved feeds. Older historical records are still held in each worker's research cache; after a restart or on another worker, records no longer in the current feeds can expire and require opening the original source.
+- Cold servers recover current story references by loading only approved feeds. Older historical records are held in each instance's research cache; after a restart or on another instance, records no longer in the current feeds can expire and require opening the original source.
 - Locally saved story references are validated and bounded. Keyboard focus, touch controls, reduced motion, loading states, and empty country views are supported.
 
-The prototype has been hardened and checked, not independently penetration-tested. Private owner access is configured in Sites. No public access or paid service was enabled.
+The prototype has been hardened and checked, not independently penetration-tested. The reader is publicly accessible on Render's Free plan. No paid service has been activated.
 
 ## Verification
 
-93 automated checks pass for feed parsing, dates, input limits, API protections, URL/redirect restrictions, cache bounds, concurrent requests, cold-worker recovery, reader startup recovery, syndicated coverage, headline ordering, causal relevance, geography, corrected excerpts, historical policy context, and hosted server origin restrictions. Ten UI regression checks cover request cancellation, stale responses, initial loading, failed refreshes, and saved references. All 12 source endpoints were available in the live check. Browser verification covered country selection through the picker and globe, empty locations, drag, scroll/button zoom, reset, and desktop/mobile layout, in addition to the existing reader checks. The production build passed. Local Cloudflare worker smoke checks reached the bundled page and fonts, rejected an invalid API request, loaded 180 headlines, and retained ranking information in the article response. A temporary public HTTPS preview also passed page, asset, news, article, context, country selection, zoom, and security checks. Permanent deployment remains pending GitHub repository setup.
+93 automated checks pass for feed parsing, dates, input limits, API protections, URL/redirect restrictions, cache bounds, concurrent requests, cold-worker recovery, reader startup recovery, syndicated coverage, headline ordering, causal relevance, geography, corrected excerpts, historical policy context, and hosted server origin restrictions. Ten UI regression checks cover request cancellation, stale responses, initial loading, failed refreshes, and saved references. Browser verification covered country selection through the picker and globe, empty locations, drag, scroll/button zoom, reset, and desktop/mobile layout, in addition to the existing reader checks. The optional production build passed.
 
-The npm production dependency audit reports zero known findings. The full audit retains 14 package findings in build, lint, and database tooling, including the unpatched braces parser. The current worker bundle excludes braces/micromatch and legacy esbuild development servers; visitor input is not evaluated as a glob pattern. Use a maintained, security-patched Node release for the optional local server: npm package overrides do not update Node's built-in fetch runtime.
+The public Render deployment was verified on October 11, 2026. Its build passed all 93 tests; the HTTPS page, bundled script, country outlines, fonts, health endpoint, news, article, and earlier-context APIs responded successfully. All 12 feeds were available and 180 headlines loaded in that check. Foreign API origins were rejected with 403, private file paths with 404, and unexpected query parameters with 400. Browser checks confirmed in-page publisher text, earlier-context results, India filtering, and globe zoom. Source availability and story counts can change.
+
+The optional framework's npm production dependency audit reports zero known findings. Its full audit retains 14 package findings in build, lint, and database tooling, including the unpatched braces parser. The verified optional Vinext worker bundle excludes braces/micromatch and legacy esbuild development servers; visitor input is not evaluated as a glob pattern. The live Node deployment uses no npm dependencies. Use a maintained, security-patched Node release for Node servers: npm package overrides do not update Node's built-in fetch runtime.
 
 ## Globe resources
 
@@ -72,14 +76,14 @@ The globe uses locally bundled D3 Array 3.2.4, D3 Geo 3.1.1, TopoJSON Client 3.1
 
 ## Hosted build
 
-The Vinext starter and Sites project identity are retained. API routes share lib/news-service.mjs with the local server.
+The public deployment uses the dependency-free Node hosted entry, `hosted-server.mjs`, on Render's Free plan. It serves the reader and live APIs together; see [RENDER.md](RENDER.md) for commands, exact-origin configuration, and hosting limits. Its default Render URL is https://causal-global-news.onrender.com/.
 
-Private Sites publication is still blocked: automatic approval rejects the required source-helper stdin action because sandbox approval is disabled in this session. Source synchronization, version saving, and deployment have not completed. No permanent hosted URL is available yet.
+The optional Vinext starter is retained. API routes share lib/news-service.mjs with the local and hosted Node servers. The deployed Node service does not install the optional framework, lint, or database tooling.
 
 ## GitHub publication
 
-The source folder has been initialized as a Git repository on the main branch. Environment files, credentials, generated assets, dependency caches, and the private Sites project identity are excluded from source publication.
+Source is published on the main branch of **https://github.com/jobanmacsecond-bot/causal-reader**. Environment files, credentials, generated assets, dependency caches, and the private Sites project identity are excluded from source publication.
 
-GitHub and Render are connected, and the Render workspace has been selected. GitHub browser sign-in and repository creation are still pending. The explicit hosted entry and free Render service configuration are prepared; see RENDER.md. GitHub Pages serves static files and cannot run this site's /api/news, /api/article, and /api/causes handlers. Preserving the live reader requires deploying the server alongside the static assets on a compatible host. A Pages-only version would need a separate snapshot build and clearly labeled scheduled refreshes.
+Render hosts the server and static assets together. GitHub Pages alone cannot run this site's /api/news, /api/article, and /api/causes handlers.
 
-**link to the webpage.txt** contains the verified temporary public preview and explains its lifetime. It works while the local hosted server, tunnel, and computer remain running. After the permanent Render deployment is verified, that file will be updated with its HTTPS address. A repository URL or localhost address is not a shareable website URL.
+**[link to the webpage.txt](link%20to%20the%20webpage.txt)** contains the verified public Render address and its Free-plan wake-up note.

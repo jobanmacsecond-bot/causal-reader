@@ -1,5 +1,7 @@
-https://mrna-larger-newman-motorola.trycloudflare.com/
+https://causal-global-news.onrender.com/
 
-Working public preview, verified October 10, 2026.
-This is a temporary link. It works while the local server, tunnel, and computer remain running and connected.
-Permanent Render deployment is pending GitHub repository setup.
+Public website, verified October 11, 2026.
+Share this link. It works independently of the local computer and server.
+Hosted on Render's Free plan: after inactivity, the first visit can take about a minute to wake the service.
+
+Source: https://github.com/jobanmacsecond-bot/causal-reader
